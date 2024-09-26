@@ -1,16 +1,36 @@
+#include "four.cpp"
 #include <iostream>
-#include <string>
-#include "function.h"
 
-int main() {
-    std::string input;
+int main()
+{
+    try {
+        Four num1{1, 2, 3};
+        Four num2("321");
 
-    std::cout << "Enter a string (lowercase letters only): ";
-    std::getline(std::cin, input);
+        std::cout << "num1: " << num1 << std::endl;
+        std::cout << "num2: " << num2 << std::endl;
 
-    int vowelCount = countVowels(input);
+        Four sum = num1 + num2;
+        std::cout << "num1 + num2: " << sum << std::endl;
 
-    std::cout << "Number of vowels: " << vowelCount << std::endl;
+        Four diff = num2 - num1;
+        std::cout << "num2 - num1: " << diff << std::endl;
+
+        std::cout << "num1 == num2: " << (num1 == num2) << std::endl;
+        std::cout << "num1 < num2: " << (num1 < num2) << std::endl;
+        std::cout << "num2 > num1: " << (num2 > num1) << std::endl;
+
+        Four copy = num1;
+        std::cout << "copy of num1: " << copy << std::endl;
+
+        Four moved = std::move(num2);
+        std::cout << "moved num2: " << moved << std::endl;
+        std::cout << "num2 после перемещения: " << num2 << std::endl;
+
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Ошибка: " << e.what() << std::endl;
+    }
 
     return 0;
 }

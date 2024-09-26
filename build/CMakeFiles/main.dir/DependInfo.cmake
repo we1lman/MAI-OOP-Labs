@@ -8,7 +8,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/workspaces/MAI-OOP-Labs/src/function.cpp" "CMakeFiles/main.dir/src/function.cpp.o" "gcc" "CMakeFiles/main.dir/src/function.cpp.o.d"
   "/workspaces/MAI-OOP-Labs/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.o" "gcc" "CMakeFiles/main.dir/src/main.cpp.o.d"
   )
 

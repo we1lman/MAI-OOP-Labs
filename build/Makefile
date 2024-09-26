@@ -103,12 +103,22 @@ install/fast: preinstall/fast
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"gmock\" \"gtest\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
 list_install_components/fast: list_install_components
 .PHONY : list_install_components/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/opt/cmake/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+.PHONY : rebuild_cache/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -120,15 +130,15 @@ edit_cache:
 edit_cache/fast: edit_cache
 .PHONY : edit_cache/fast
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/opt/cmake/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/opt/cmake/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
 
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-.PHONY : rebuild_cache/fast
+# Special rule for the target test
+test/fast: test
+.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -175,17 +185,17 @@ main/fast:
 .PHONY : main/fast
 
 #=============================================================================
-# Target rules for targets named test
+# Target rules for targets named four_tests
 
 # Build rule for target.
-test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test
-.PHONY : test
+four_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 four_tests
+.PHONY : four_tests
 
 # fast build rule for target.
-test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-.PHONY : test/fast
+four_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/four_tests.dir/build.make CMakeFiles/four_tests.dir/build
+.PHONY : four_tests/fast
 
 #=============================================================================
 # Target rules for targets named gmock_main
@@ -197,7 +207,7 @@ gmock_main: cmake_check_build_system
 
 # fast build rule for target.
 gmock_main/fast:
-	$(MAKE) $(MAKESILENT) -f external/googletest/googlemock/CMakeFiles/gmock_main.dir/build.make external/googletest/googlemock/CMakeFiles/gmock_main.dir/build
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build
 .PHONY : gmock_main/fast
 
 #=============================================================================
@@ -210,21 +220,8 @@ gmock: cmake_check_build_system
 
 # fast build rule for target.
 gmock/fast:
-	$(MAKE) $(MAKESILENT) -f external/googletest/googlemock/CMakeFiles/gmock.dir/build.make external/googletest/googlemock/CMakeFiles/gmock.dir/build
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build
 .PHONY : gmock/fast
-
-#=============================================================================
-# Target rules for targets named gtest_main
-
-# Build rule for target.
-gtest_main: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest_main
-.PHONY : gtest_main
-
-# fast build rule for target.
-gtest_main/fast:
-	$(MAKE) $(MAKESILENT) -f external/googletest/googletest/CMakeFiles/gtest_main.dir/build.make external/googletest/googletest/CMakeFiles/gtest_main.dir/build
-.PHONY : gtest_main/fast
 
 #=============================================================================
 # Target rules for targets named gtest
@@ -236,35 +233,21 @@ gtest: cmake_check_build_system
 
 # fast build rule for target.
 gtest/fast:
-	$(MAKE) $(MAKESILENT) -f external/googletest/googletest/CMakeFiles/gtest.dir/build.make external/googletest/googletest/CMakeFiles/gtest.dir/build
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
-src/function.o: src/function.cpp.o
-.PHONY : src/function.o
+#=============================================================================
+# Target rules for targets named gtest_main
 
-# target to build an object file
-src/function.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/function.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/function.cpp.o
-.PHONY : src/function.cpp.o
+# Build rule for target.
+gtest_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest_main
+.PHONY : gtest_main
 
-src/function.i: src/function.cpp.i
-.PHONY : src/function.i
-
-# target to preprocess a source file
-src/function.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/function.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/function.cpp.i
-.PHONY : src/function.cpp.i
-
-src/function.s: src/function.cpp.s
-.PHONY : src/function.s
-
-# target to generate assembly for a file
-src/function.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/function.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/function.cpp.s
-.PHONY : src/function.cpp.s
+# fast build rule for target.
+gtest_main/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build
+.PHONY : gtest_main/fast
 
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
@@ -290,29 +273,29 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
-tests/function_test.o: tests/function_test.cpp.o
-.PHONY : tests/function_test.o
+tests/four_tests.o: tests/four_tests.cpp.o
+.PHONY : tests/four_tests.o
 
 # target to build an object file
-tests/function_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/tests/function_test.cpp.o
-.PHONY : tests/function_test.cpp.o
+tests/four_tests.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/four_tests.dir/build.make CMakeFiles/four_tests.dir/tests/four_tests.cpp.o
+.PHONY : tests/four_tests.cpp.o
 
-tests/function_test.i: tests/function_test.cpp.i
-.PHONY : tests/function_test.i
+tests/four_tests.i: tests/four_tests.cpp.i
+.PHONY : tests/four_tests.i
 
 # target to preprocess a source file
-tests/function_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/tests/function_test.cpp.i
-.PHONY : tests/function_test.cpp.i
+tests/four_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/four_tests.dir/build.make CMakeFiles/four_tests.dir/tests/four_tests.cpp.i
+.PHONY : tests/four_tests.cpp.i
 
-tests/function_test.s: tests/function_test.cpp.s
-.PHONY : tests/function_test.s
+tests/four_tests.s: tests/four_tests.cpp.s
+.PHONY : tests/four_tests.s
 
 # target to generate assembly for a file
-tests/function_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/tests/function_test.cpp.s
-.PHONY : tests/function_test.cpp.s
+tests/four_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/four_tests.dir/build.make CMakeFiles/four_tests.dir/tests/four_tests.cpp.s
+.PHONY : tests/four_tests.cpp.s
 
 # Help Target
 help:
@@ -326,21 +309,19 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... test"
+	@echo "... four_tests"
 	@echo "... gmock"
 	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
 	@echo "... main"
-	@echo "... test"
-	@echo "... src/function.o"
-	@echo "... src/function.i"
-	@echo "... src/function.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... tests/function_test.o"
-	@echo "... tests/function_test.i"
-	@echo "... tests/function_test.s"
+	@echo "... tests/four_tests.o"
+	@echo "... tests/four_tests.i"
+	@echo "... tests/four_tests.s"
 .PHONY : help
 
 

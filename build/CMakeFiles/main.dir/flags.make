@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/workspaces/MAI-OOP-Labs/include
+CXX_INCLUDES = 
 
 CXX_FLAGS = -std=gnu++14
 
