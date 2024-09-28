@@ -288,11 +288,11 @@ bool Four::operator<(const Four& other) const
         return false;
     }
 
-    for (size_t i = size_; i > 0; --i)
+    for (size_t i = size_ - 1; i > 0; --i)
     {
-        int currentDig = data_[i - 1];
-        int otherDig = other.data_[i - 1];
-
+        int currentDig = data_[i];
+        int otherDig = other.data_[i];
+        std::cout << currentDig << " " << otherDig << std::endl;
         if (currentDig < otherDig)
         {
             return true;
@@ -317,11 +317,10 @@ bool Four::operator>=(const Four& other) const {
     return *this > other || *this == other;
 }
 
-std::ostream& operator<<(std::ostream &os, const Four& obj)
-{
-    for (size_t i = obj.size_; i > 0; --i)
+std::ostream& operator<<(std::ostream& os, const Four& digits) {
+    for (size_t i = digits.size_; i > 0; --i)
     {
-        os << static_cast<int>(obj.data_[i - 1]);
+        os << static_cast<int>(digits.data_[i - 1]);
     }
     return os;
 }

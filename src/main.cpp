@@ -7,6 +7,9 @@ int main()
         Four num1{1, 2, 3};
         Four num2("321");
 
+        Four number3({1, 1});   // 21 в 4-ой системе
+        Four number1({3, 3});   // 23 в 4-ой системе
+        std::cout << (number1 > number3);
         std::cout << "num1: " << num1 << std::endl;
         std::cout << "num2: " << num2 << std::endl;
 

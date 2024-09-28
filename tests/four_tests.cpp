@@ -27,9 +27,9 @@ TEST(FourTest, IncorrectLengthConstructor)
 // Тест конструктора с инициализацией списка
 TEST(FourTest, InitListConstructor)
 {
-    Four expected("333"); // Представляет число 333 в 4-ой системе
+    Four expected("123"); // Представляет число 333 в 4-ой системе
 
-    Four number{3, 3, 3};
+    Four number{1, 2, 3};
 
     ASSERT_TRUE(number == expected);
 }
@@ -45,11 +45,11 @@ TEST(FourTest, IncorrectDigitInitListConstructor)
 // Тест конструктора из строки
 TEST(FourTest, StringConstructor)
 {
-    Four expected{3, 2, 2}; // Представляет число 223 в 4-ой системе
+    Four expected{2, 2, 3}; // Представляет число 223 в 4-ой системе
 
     Four number("223");
 
-    ASSERT_TRUE(number == expected) << "Ожидалось, что число '223' будет равно {3, 2, 2}, но получили: " << number;
+    ASSERT_TRUE(number == expected) << "number -> " << number << " expected -> " << expected;
 }
 
 
@@ -134,10 +134,10 @@ TEST(FourTest, LessThan_GreaterNumber)
 // Тест на оператор "<": проверка, что меньшее число меньше большего
 TEST(FourTest, LessThan_LessNumber)
 {
-    Four number3({2, 1});   // 12 в 4-ой системе
-    Four number1({2, 3});   // 32 в 4-ой системе
+    Four number3({1, 1});   // 21 в 4-ой системе
+    Four number1({3, 3});   // 23 в 4-ой системе
 
-    ASSERT_TRUE(number3 < number1) << "Ожидалось, что меньшее число меньше большего.";
+    ASSERT_TRUE(number1 < number3) << "Ожидалось, что меньшее число меньше большего.";
 }
 
 // Тест на оператор ">": проверка, что число не больше самого себя
@@ -152,10 +152,10 @@ TEST(FourTest, GreaterThan_SameNumbers)
 // Тест на оператор ">": проверка, что большее число больше меньшего
 TEST(FourTest, GreaterThan_GreaterNumber)
 {
-    Four number1({2, 3});   // 32 в 4-ой системе
-    Four number3({2, 1});   // 12 в 4-ой системе
+    Four number1{3, 3};   // 33 в 4-ой системе
+    Four number3{1, 1};   // 11 в 4-ой системе
 
-    ASSERT_TRUE(number1 > number3) << "Ожидалось, что большее число больше меньшего.";
+    ASSERT_TRUE(number1 > number3) << "Ожидалось, что большее число больше меньшего." << number1 << " > " << number3;
 }
 
 // Тест на оператор ">": проверка, что меньшее число не больше большего
