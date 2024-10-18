@@ -89,6 +89,16 @@ install/local/fast: preinstall/fast
 	/opt/cmake/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/opt/cmake/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+.PHONY : rebuild_cache/fast
+
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -103,22 +113,12 @@ install/fast: preinstall/fast
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"gmock\" \"gtest\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
 list_install_components/fast: list_install_components
 .PHONY : list_install_components/fast
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/opt/cmake/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-.PHONY : rebuild_cache/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -129,16 +129,6 @@ edit_cache:
 # Special rule for the target edit_cache
 edit_cache/fast: edit_cache
 .PHONY : edit_cache/fast
-
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/opt/cmake/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -172,30 +162,43 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named main
+# Target rules for targets named main_lab3
 
 # Build rule for target.
-main: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 main
-.PHONY : main
+main_lab3: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 main_lab3
+.PHONY : main_lab3
 
 # fast build rule for target.
-main/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
-.PHONY : main/fast
+main_lab3/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main_lab3.dir/build.make CMakeFiles/main_lab3.dir/build
+.PHONY : main_lab3/fast
 
 #=============================================================================
-# Target rules for targets named four_tests
+# Target rules for targets named tests_lab3
 
 # Build rule for target.
-four_tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 four_tests
-.PHONY : four_tests
+tests_lab3: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests_lab3
+.PHONY : tests_lab3
 
 # fast build rule for target.
-four_tests/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/four_tests.dir/build.make CMakeFiles/four_tests.dir/build
-.PHONY : four_tests/fast
+tests_lab3/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests_lab3.dir/build.make CMakeFiles/tests_lab3.dir/build
+.PHONY : tests_lab3/fast
+
+#=============================================================================
+# Target rules for targets named Figures
+
+# Build rule for target.
+Figures: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Figures
+.PHONY : Figures
+
+# fast build rule for target.
+Figures/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/build
+.PHONY : Figures/fast
 
 #=============================================================================
 # Target rules for targets named gmock_main
@@ -207,7 +210,7 @@ gmock_main: cmake_check_build_system
 
 # fast build rule for target.
 gmock_main/fast:
-	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build
+	$(MAKE) $(MAKESILENT) -f googletest/googlemock/CMakeFiles/gmock_main.dir/build.make googletest/googlemock/CMakeFiles/gmock_main.dir/build
 .PHONY : gmock_main/fast
 
 #=============================================================================
@@ -220,21 +223,8 @@ gmock: cmake_check_build_system
 
 # fast build rule for target.
 gmock/fast:
-	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build
+	$(MAKE) $(MAKESILENT) -f googletest/googlemock/CMakeFiles/gmock.dir/build.make googletest/googlemock/CMakeFiles/gmock.dir/build
 .PHONY : gmock/fast
-
-#=============================================================================
-# Target rules for targets named gtest
-
-# Build rule for target.
-gtest: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest
-.PHONY : gtest
-
-# fast build rule for target.
-gtest/fast:
-	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build
-.PHONY : gtest/fast
 
 #=============================================================================
 # Target rules for targets named gtest_main
@@ -246,15 +236,172 @@ gtest_main: cmake_check_build_system
 
 # fast build rule for target.
 gtest_main/fast:
-	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build
+	$(MAKE) $(MAKESILENT) -f googletest/googletest/CMakeFiles/gtest_main.dir/build.make googletest/googletest/CMakeFiles/gtest_main.dir/build
 .PHONY : gtest_main/fast
+
+#=============================================================================
+# Target rules for targets named gtest
+
+# Build rule for target.
+gtest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest
+.PHONY : gtest
+
+# fast build rule for target.
+gtest/fast:
+	$(MAKE) $(MAKESILENT) -f googletest/googletest/CMakeFiles/gtest.dir/build.make googletest/googletest/CMakeFiles/gtest.dir/build
+.PHONY : gtest/fast
+
+src/Figure.o: src/Figure.cpp.o
+.PHONY : src/Figure.o
+
+# target to build an object file
+src/Figure.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Figure.cpp.o
+.PHONY : src/Figure.cpp.o
+
+src/Figure.i: src/Figure.cpp.i
+.PHONY : src/Figure.i
+
+# target to preprocess a source file
+src/Figure.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Figure.cpp.i
+.PHONY : src/Figure.cpp.i
+
+src/Figure.s: src/Figure.cpp.s
+.PHONY : src/Figure.s
+
+# target to generate assembly for a file
+src/Figure.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Figure.cpp.s
+.PHONY : src/Figure.cpp.s
+
+src/FigureArray.o: src/FigureArray.cpp.o
+.PHONY : src/FigureArray.o
+
+# target to build an object file
+src/FigureArray.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/FigureArray.cpp.o
+.PHONY : src/FigureArray.cpp.o
+
+src/FigureArray.i: src/FigureArray.cpp.i
+.PHONY : src/FigureArray.i
+
+# target to preprocess a source file
+src/FigureArray.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/FigureArray.cpp.i
+.PHONY : src/FigureArray.cpp.i
+
+src/FigureArray.s: src/FigureArray.cpp.s
+.PHONY : src/FigureArray.s
+
+# target to generate assembly for a file
+src/FigureArray.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/FigureArray.cpp.s
+.PHONY : src/FigureArray.cpp.s
+
+src/Pentagon.o: src/Pentagon.cpp.o
+.PHONY : src/Pentagon.o
+
+# target to build an object file
+src/Pentagon.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Pentagon.cpp.o
+.PHONY : src/Pentagon.cpp.o
+
+src/Pentagon.i: src/Pentagon.cpp.i
+.PHONY : src/Pentagon.i
+
+# target to preprocess a source file
+src/Pentagon.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Pentagon.cpp.i
+.PHONY : src/Pentagon.cpp.i
+
+src/Pentagon.s: src/Pentagon.cpp.s
+.PHONY : src/Pentagon.s
+
+# target to generate assembly for a file
+src/Pentagon.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Pentagon.cpp.s
+.PHONY : src/Pentagon.cpp.s
+
+src/Point.o: src/Point.cpp.o
+.PHONY : src/Point.o
+
+# target to build an object file
+src/Point.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Point.cpp.o
+.PHONY : src/Point.cpp.o
+
+src/Point.i: src/Point.cpp.i
+.PHONY : src/Point.i
+
+# target to preprocess a source file
+src/Point.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Point.cpp.i
+.PHONY : src/Point.cpp.i
+
+src/Point.s: src/Point.cpp.s
+.PHONY : src/Point.s
+
+# target to generate assembly for a file
+src/Point.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Point.cpp.s
+.PHONY : src/Point.cpp.s
+
+src/Rhombus.o: src/Rhombus.cpp.o
+.PHONY : src/Rhombus.o
+
+# target to build an object file
+src/Rhombus.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Rhombus.cpp.o
+.PHONY : src/Rhombus.cpp.o
+
+src/Rhombus.i: src/Rhombus.cpp.i
+.PHONY : src/Rhombus.i
+
+# target to preprocess a source file
+src/Rhombus.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Rhombus.cpp.i
+.PHONY : src/Rhombus.cpp.i
+
+src/Rhombus.s: src/Rhombus.cpp.s
+.PHONY : src/Rhombus.s
+
+# target to generate assembly for a file
+src/Rhombus.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Rhombus.cpp.s
+.PHONY : src/Rhombus.cpp.s
+
+src/Trapezoid.o: src/Trapezoid.cpp.o
+.PHONY : src/Trapezoid.o
+
+# target to build an object file
+src/Trapezoid.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Trapezoid.cpp.o
+.PHONY : src/Trapezoid.cpp.o
+
+src/Trapezoid.i: src/Trapezoid.cpp.i
+.PHONY : src/Trapezoid.i
+
+# target to preprocess a source file
+src/Trapezoid.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Trapezoid.cpp.i
+.PHONY : src/Trapezoid.cpp.i
+
+src/Trapezoid.s: src/Trapezoid.cpp.s
+.PHONY : src/Trapezoid.s
+
+# target to generate assembly for a file
+src/Trapezoid.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Figures.dir/build.make CMakeFiles/Figures.dir/src/Trapezoid.cpp.s
+.PHONY : src/Trapezoid.cpp.s
 
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main_lab3.dir/build.make CMakeFiles/main_lab3.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -262,7 +409,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main_lab3.dir/build.make CMakeFiles/main_lab3.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -270,32 +417,32 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main_lab3.dir/build.make CMakeFiles/main_lab3.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
-tests/four_tests.o: tests/four_tests.cpp.o
-.PHONY : tests/four_tests.o
+tests/test_figure.o: tests/test_figure.cpp.o
+.PHONY : tests/test_figure.o
 
 # target to build an object file
-tests/four_tests.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/four_tests.dir/build.make CMakeFiles/four_tests.dir/tests/four_tests.cpp.o
-.PHONY : tests/four_tests.cpp.o
+tests/test_figure.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests_lab3.dir/build.make CMakeFiles/tests_lab3.dir/tests/test_figure.cpp.o
+.PHONY : tests/test_figure.cpp.o
 
-tests/four_tests.i: tests/four_tests.cpp.i
-.PHONY : tests/four_tests.i
+tests/test_figure.i: tests/test_figure.cpp.i
+.PHONY : tests/test_figure.i
 
 # target to preprocess a source file
-tests/four_tests.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/four_tests.dir/build.make CMakeFiles/four_tests.dir/tests/four_tests.cpp.i
-.PHONY : tests/four_tests.cpp.i
+tests/test_figure.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests_lab3.dir/build.make CMakeFiles/tests_lab3.dir/tests/test_figure.cpp.i
+.PHONY : tests/test_figure.cpp.i
 
-tests/four_tests.s: tests/four_tests.cpp.s
-.PHONY : tests/four_tests.s
+tests/test_figure.s: tests/test_figure.cpp.s
+.PHONY : tests/test_figure.s
 
 # target to generate assembly for a file
-tests/four_tests.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/four_tests.dir/build.make CMakeFiles/four_tests.dir/tests/four_tests.cpp.s
-.PHONY : tests/four_tests.cpp.s
+tests/test_figure.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests_lab3.dir/build.make CMakeFiles/tests_lab3.dir/tests/test_figure.cpp.s
+.PHONY : tests/test_figure.cpp.s
 
 # Help Target
 help:
@@ -309,19 +456,37 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... test"
-	@echo "... four_tests"
+	@echo "... Figures"
 	@echo "... gmock"
 	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
-	@echo "... main"
+	@echo "... main_lab3"
+	@echo "... tests_lab3"
+	@echo "... src/Figure.o"
+	@echo "... src/Figure.i"
+	@echo "... src/Figure.s"
+	@echo "... src/FigureArray.o"
+	@echo "... src/FigureArray.i"
+	@echo "... src/FigureArray.s"
+	@echo "... src/Pentagon.o"
+	@echo "... src/Pentagon.i"
+	@echo "... src/Pentagon.s"
+	@echo "... src/Point.o"
+	@echo "... src/Point.i"
+	@echo "... src/Point.s"
+	@echo "... src/Rhombus.o"
+	@echo "... src/Rhombus.i"
+	@echo "... src/Rhombus.s"
+	@echo "... src/Trapezoid.o"
+	@echo "... src/Trapezoid.i"
+	@echo "... src/Trapezoid.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... tests/four_tests.o"
-	@echo "... tests/four_tests.i"
-	@echo "... tests/four_tests.s"
+	@echo "... tests/test_figure.o"
+	@echo "... tests/test_figure.i"
+	@echo "... tests/test_figure.s"
 .PHONY : help
 
 

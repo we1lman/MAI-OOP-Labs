@@ -1,39 +1,60 @@
-#include "four.cpp"
 #include <iostream>
+#include "Point.hpp"
+#include "Trapezoid.hpp"
+#include "Pentagon.hpp"
+#include "Rhombus.hpp"
+#include "FigureArray.hpp"
 
 int main()
 {
-    try {
-        Four num1{1, 2, 3};
-        Four num2("321");
+    Point points_trapezoid[4] = { Point(0, 0), Point(4, 0), Point(3, 2), Point(1, 2) };
+    Point points_pentagon[5] = { Point(0, 0), Point(2, 0), Point(3, 1), Point(1.5, 3), Point(0, 1) };
+    Point points_rhombus[4] = { Point(0, 0), Point(2, 1), Point(0, 2), Point(-2, 1) };
 
-        Four number3({1, 1});   // 21 в 4-ой системе
-        Four number1({3, 3});   // 23 в 4-ой системе
-        std::cout << (number1 > number3);
-        std::cout << "num1: " << num1 << std::endl;
-        std::cout << "num2: " << num2 << std::endl;
+    Trapezoid trapezoid(points_trapezoid);
+    Pentagon pentagon(points_pentagon);
+    Rhombus rhombus(points_rhombus);
 
-        Four sum = num1 + num2;
-        std::cout << "num1 + num2: " << sum << std::endl;
+    std::cout << "Trapezoid Information: " << std::endl;
+    trapezoid.getInfo();
+    std::cout << "Area: " << static_cast<double>(trapezoid) << std::endl;
+    std::cout << "Geometric Center: " << trapezoid.geometricCenter() << std::endl;
+    
+    std::cout << "\nPentagon Information: " << std::endl;
+    pentagon.getInfo();
+    std::cout << "Area: " << static_cast<double>(pentagon) << std::endl;
+    std::cout << "Geometric Center: " << pentagon.geometricCenter() << std::endl;
+    
+    std::cout << "\nRhombus Information: " << std::endl;
+    rhombus.getInfo();
+    std::cout << "Area: " << static_cast<double>(rhombus) << std::endl;
+    std::cout << "Geometric Center: " << rhombus.geometricCenter() << std::endl;
 
-        Four diff = num2 - num1;
-        std::cout << "num2 - num1: " << diff << std::endl;
-
-        std::cout << "num1 == num2: " << (num1 == num2) << std::endl;
-        std::cout << "num1 < num2: " << (num1 < num2) << std::endl;
-        std::cout << "num2 > num1: " << (num2 > num1) << std::endl;
-
-        Four copy = num1;
-        std::cout << "copy of num1: " << copy << std::endl;
-
-        Four moved = std::move(num2);
-        std::cout << "moved num2: " << moved << std::endl;
-        std::cout << "num2 после перемещения: " << num2 << std::endl;
-
+    Trapezoid trapezoid2(points_trapezoid);
+    if (trapezoid == trapezoid2) {
+        std::cout << "\nThe trapezoids are equal!" << std::endl;
+    } else {
+        std::cout << "\nThe trapezoids are not equal!" << std::endl;
     }
-    catch (const std::exception& e) {
-        std::cerr << "Ошибка: " << e.what() << std::endl;
-    }
+
+    std::cout << "\nInput a new point (format: x y): ";
+    Point p;
+    std::cin >> p;
+    std::cout << "You entered point: " << p << std::endl;
+
+    FigureArray figures(3);
+    figures.addFigure(new Trapezoid(points_trapezoid));
+    figures.addFigure(new Pentagon(points_pentagon));
+    figures.addFigure(new Rhombus(points_rhombus));
+
+    std::cout << "\nAll figures in array: " << std::endl;
+    figures.printAll();
+    
+    std::cout << "\nTotal area of all figures: " << figures.totalArea() << std::endl;
+
+    figures.removeFigure(1);
+    std::cout << "\nFigures after removing the second one: " << std::endl;
+    figures.printAll();
 
     return 0;
 }
