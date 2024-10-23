@@ -2,19 +2,21 @@
 #include <cmath>
 #include <iostream>
 
-Pentagon::Pentagon(const Point points[5]) {
+Pentagon::Pentagon(const Point (&points)[5])
+{
     for (int i = 0; i < 5; ++i) {
         points_[i] = points[i];
     }
 }
 
-Pentagon::Pentagon(const Pentagon& other) {
+Pentagon::Pentagon(const Pentagon &other)
+{
     for (int i = 0; i < 5; ++i) {
         points_[i] = other.points_[i];
     }
 }
 
-Pentagon& Pentagon::operator=(const Pentagon& other)
+Pentagon& Pentagon::operator=(const Pentagon &other)
 {
     if (this != &other)
     {
@@ -26,7 +28,7 @@ Pentagon& Pentagon::operator=(const Pentagon& other)
     return *this;
 }
 
-Pentagon& Pentagon::operator=(Pentagon&& other) noexcept
+Pentagon& Pentagon::operator=(Pentagon &&other) noexcept
 {
     if (this != &other)
     {
@@ -38,9 +40,26 @@ Pentagon& Pentagon::operator=(Pentagon&& other) noexcept
     return *this;
 }
 
-Figure* Pentagon::clone() const
+Point Pentagon::geometricCenter() const
 {
-    return new Pentagon(*this);
+    double centerX = 0, centerY = 0;
+    for (const auto &point : points_)
+    {
+        centerX += point.x_;
+        centerY += point.y_;
+    }
+    return Point{centerX / 5, centerY / 5};
+}
+
+Pentagon::operator double() const
+{
+    double area = 0;
+    for (int i = 0; i < 5; ++i)
+    {
+        int j = (i + 1) % 5;
+        area += points_[i].x_ * points_[j].y_ - points_[j].x_ * points_[i].y_;
+    }
+    return std::abs(area) / 2;
 }
 
 bool Pentagon::operator==(const Figure &other) const
@@ -58,62 +77,16 @@ bool Pentagon::operator==(const Figure &other) const
     return true;
 }
 
-void Pentagon::getInfo() const
-{
-    std::cout << *this << std::endl;
-}
-
-Point Pentagon::geometricCenter() const
-{
-    double centerX = 0, centerY = 0;
-    for (const auto &point : points_)
-    {
-        centerX += point.x;
-        centerY += point.y;
-    }
-    return Point{centerX / 5, centerY / 5};
-}
-
-Pentagon::operator double() const
-{
-    double area = 0;
-    for (int i = 0; i < 5; ++i)
-    {
-        int j = (i + 1) % 5;
-        area += points_[i].x * points_[j].y - points_[j].x * points_[i].y;
-    }
-    return std::abs(area) / 2;
-}
-
-bool Pentagon::isValidPentagon() const
-{
-    const double epsilon = 1e-3;
-    double sideLength = std::sqrt(std::pow(points_[1].x - points_[0].x, 2) + std::pow(points_[1].y - points_[0].y, 2));
-
-    for (int i = 1; i < 5; ++i)
-    {
-        int next = (i + 1) % 5;
-        double currentSide = std::sqrt(std::pow(points_[next].x - points_[i].x, 2) + std::pow(points_[next].y - points_[i].y, 2));
-        if (std::abs(currentSide - sideLength) > epsilon)
-        {
-            throw std::invalid_argument("Points do not form a valid pentagon.");
-        }
-    }
-
-    return true;
-}
-
-std::ostream &operator<<(std::ostream &os, const Pentagon &pentagon)
+void Pentagon::print(std::ostream& os) const
 {
     os << "Pentagon: points = ";
-    for (const auto &point : pentagon.points_)
+    for (const auto &point : points_)
     {
         os << point << " ";
     }
-    return os;
 }
 
-std::istream &operator>>(std::istream &is, Pentagon &pentagon)
+void Pentagon::read(std::istream& is)
 {
     Point points[5];
     for (int i = 0; i < 5; ++i)
@@ -122,7 +95,22 @@ std::istream &operator>>(std::istream &is, Pentagon &pentagon)
     }
     for (int i = 0; i < 5; ++i)
     {
-        pentagon.points_[i] = points[i];
+        points_[i] = points[i];
     }
-    return is;
+}
+
+bool Pentagon::isValidPentagon() const
+{
+    const double epsilon = 1e-3;
+    double sideLength = std::sqrt(std::pow(points_[1].x_ - points_[0].x_, 2) + std::pow(points_[1].y_ - points_[0].y_, 2));
+
+    for (int i = 1; i < 5; ++i) {
+        int next = (i + 1) % 5;
+        double currentSide = std::sqrt(std::pow(points_[next].x_ - points_[i].x_, 2) + std::pow(points_[next].y_ - points_[i].y_, 2));
+        if (std::abs(currentSide - sideLength) > epsilon) {
+            throw std::invalid_argument("Points do not form a valid pentagon.");
+        }
+    }
+
+    return true;
 }

@@ -11,16 +11,16 @@ RM = rm -rf
 
 all: build
 
-build:
+build: clean
 	@echo "Создание директории сборки..."
 	$(CMAKE) -S . -B $(BUILD_DIR)
 	$(MAKE) -C $(BUILD_DIR)
 
-run: build
+run:
 	@echo "Запуск основного приложения..."
 	./$(BUILD_DIR)/$(MAIN_EXEC)
 
-test: build
+test:
 	@echo "Запуск тестов..."
 	./$(BUILD_DIR)/$(TEST_EXEC)
 

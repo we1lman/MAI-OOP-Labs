@@ -2,12 +2,14 @@
 #include <cmath>
 #include <iostream>
 
-Rhombus::Rhombus(const Point points[4])
+Rhombus::Rhombus(const Point (&points)[4])
 {
     for (int i = 0; i < 4; ++i) {
         points_[i] = points[i];
     }
-    isValidRhombus();
+    if (!isValidRhombus()) {
+        throw std::invalid_argument("Points do not form a valid rhombus.");
+    }
 }
 
 Rhombus::Rhombus(const Rhombus& other) {
@@ -40,6 +42,27 @@ Rhombus &Rhombus::operator=(Rhombus &&other) noexcept
     return *this;
 }
 
+Point Rhombus::geometricCenter() const
+{
+    double centerX = (points_[0].x_ + points_[2].x_) / 2.0;
+    double centerY = (points_[0].y_ + points_[2].y_) / 2.0;
+
+    return Point{centerX, centerY};
+}
+
+double Rhombus::distance(const Point &p1, const Point &p2) const {
+    double dx = p2.x_ - p1.x_;
+    double dy = p2.y_ - p1.y_;
+    return std::sqrt(dx * dx + dy * dy);
+}
+
+Rhombus::operator double() const
+{
+    double d1 = distance(points_[0], points_[2]);
+    double d2 = distance(points_[1], points_[3]);
+    return 0.5 * d1 * d2;
+}
+
 bool Rhombus::operator==(const Figure &other) const
 {
     const Rhombus *otherRhombus = dynamic_cast<const Rhombus *>(&other);
@@ -55,55 +78,16 @@ bool Rhombus::operator==(const Figure &other) const
     return true;
 }
 
-void Rhombus::getInfo() const
-{
-    std::cout << *this << std::endl;
-}
-
-Point Rhombus::geometricCenter() const
-{
-    double centerX = (points_[0].x + points_[2].x) / 2.0;
-    double centerY = (points_[0].y + points_[2].y) / 2.0;
-
-    return Point{centerX, centerY};
-}
-
-Rhombus::operator double() const
-{
-    double d1 = std::sqrt(std::pow(points_[1].x - points_[0].x, 2) + std::pow(points_[1].y - points_[0].y, 2));
-    double d2 = std::sqrt(std::pow(points_[2].x - points_[1].x, 2) + std::pow(points_[2].y - points_[1].y, 2));
-    return 0.5 * d1 * d2;
-}
-
-bool Rhombus::isValidRhombus() const
-{
-    const double epsilon = 1e-3;
-    double sideLength = std::sqrt(std::pow(points_[1].x - points_[0].x, 2) + std::pow(points_[1].y - points_[0].y, 2));
-
-    for (int i = 1; i < 4; ++i)
-    {
-        int next = (i + 1) % 4;
-        double currentSide = std::sqrt(std::pow(points_[next].x - points_[i].x, 2) + std::pow(points_[next].y - points_[i].y, 2));
-        if (std::abs(currentSide - sideLength) > epsilon)
-        {
-            throw std::invalid_argument("Points do not form a valid rhombus.");
-        }
-    }
-
-    return true;
-}
-
-std::ostream &operator<<(std::ostream &os, const Rhombus &rhombus)
+void Rhombus::print(std::ostream& os) const
 {
     os << "Rhombus: points = ";
-    for (const auto &point : rhombus.points_)
+    for (const auto &point : points_)
     {
         os << point << " ";
     }
-    return os;
 }
 
-std::istream &operator>>(std::istream &is, Rhombus &rhombus)
+void Rhombus::read(std::istream& is)
 {
     Point points[4];
     for (int i = 0; i < 4; ++i)
@@ -112,7 +96,22 @@ std::istream &operator>>(std::istream &is, Rhombus &rhombus)
     }
     for (int i = 0; i < 4; ++i)
     {
-        rhombus.points_[i] = points[i];
+        points_[i] = points[i];
     }
-    return is;
+}
+
+bool Rhombus::isValidRhombus() const
+{
+    const double epsilon = 1e-3;
+    double sideLength = std::sqrt(std::pow(points_[1].x_ - points_[0].x_, 2) + std::pow(points_[1].y_ - points_[0].y_, 2));
+
+    for (int i = 1; i < 4; ++i) {
+        int next = (i + 1) % 4;
+        double currentSide = std::sqrt(std::pow(points_[next].x_ - points_[i].x_, 2) + std::pow(points_[next].y_ - points_[i].y_, 2));
+        if (std::abs(currentSide - sideLength) > epsilon) {
+            throw std::invalid_argument("Points do not form a valid rhombus.");
+        }
+    }
+
+    return true;
 }

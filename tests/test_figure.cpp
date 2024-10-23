@@ -2,102 +2,139 @@
 #include "Trapezoid.hpp"
 #include "Pentagon.hpp"
 #include "Rhombus.hpp"
+#include "FigureArray.hpp"
 
-//////////////////////////////////////////
 // Тесты для класса Trapezoid
-
-TEST(TrapezoidTest, CreationTest) {
+TEST(TrapezoidTest, ConstructorCopy) {
     Point points[4] = { Point(0, 0), Point(4, 0), Point(3, 2), Point(1, 2) };
-    Trapezoid trapezoid(points);
-    EXPECT_EQ(trapezoid.geometricCenter().x, 2.0);
-    EXPECT_EQ(trapezoid.geometricCenter().y, 1.0);
+    Trapezoid t1(points);
+    Trapezoid t2 = t1;
+    EXPECT_EQ(t1, t2);
 }
 
-TEST(TrapezoidTest, AreaTest) {
+TEST(TrapezoidTest, ConstructorMove) {
     Point points[4] = { Point(0, 0), Point(4, 0), Point(3, 2), Point(1, 2) };
-    Trapezoid trapezoid(points);
-    double area = static_cast<double>(trapezoid);
-    EXPECT_NEAR(area, 8.0, 1e-6);
+    Trapezoid t1(points);
+    Trapezoid t2 = std::move(t1);
+    EXPECT_EQ(static_cast<double>(t2), 6.0);
 }
 
-TEST(TrapezoidTest, GeometricCenterTest) {
+TEST(TrapezoidTest, OperatorDouble) {
     Point points[4] = { Point(0, 0), Point(4, 0), Point(3, 2), Point(1, 2) };
-    Trapezoid trapezoid(points);
-    Point center = trapezoid.geometricCenter();
-    EXPECT_NEAR(center.x, 2.0, 1e-6);
-    EXPECT_NEAR(center.y, 1.0, 1e-6);
+    Trapezoid t(points);
+    double area = static_cast<double>(t);
+    EXPECT_NEAR(area, 6.0, 1e-6);
 }
 
-TEST(TrapezoidTest, EqualityTest) {
+TEST(TrapezoidTest, GeometricCenter) {
+    Point points[4] = { Point(0, 0), Point(4, 0), Point(3, 2), Point(1, 2) };
+    Trapezoid t(points);
+    Point center = t.geometricCenter();
+    EXPECT_NEAR(center.x_, 2.0, 1e-6);
+    EXPECT_NEAR(center.y_, 1.0, 1e-6);
+}
+
+TEST(TrapezoidTest, EqualityOperator) {
     Point points1[4] = { Point(0, 0), Point(4, 0), Point(3, 2), Point(1, 2) };
-    Point points2[4] = { Point(0, 0), Point(4, 0), Point(3, 2), Point(1, 2) };
-    Trapezoid trapezoid1(points1);
-    Trapezoid trapezoid2(points2);
-    EXPECT_TRUE(trapezoid1 == trapezoid2);
+    Trapezoid t1(points1);
+    Trapezoid t2(points1);
+    EXPECT_TRUE(t1 == t2);
 }
 
-//////////////////////////////////////////
 // Тесты для класса Pentagon
-
-TEST(PentagonTest, CreationTest) {
+TEST(PentagonTest, ConstructorCopy) {
     Point points[5] = { Point(0, 0), Point(2, 0), Point(3, 1), Point(1.5, 3), Point(0, 1) };
-    Pentagon pentagon(points);
-    EXPECT_EQ(pentagon.geometricCenter().x, 1.3);
-    EXPECT_EQ(pentagon.geometricCenter().y, 1.0);
+    Pentagon p1(points);
+    Pentagon p2 = p1;
+    EXPECT_EQ(p1, p2);
 }
 
-TEST(PentagonTest, AreaTest) {
+TEST(PentagonTest, ConstructorMove) {
     Point points[5] = { Point(0, 0), Point(2, 0), Point(3, 1), Point(1.5, 3), Point(0, 1) };
-    Pentagon pentagon(points);
-    double area = static_cast<double>(pentagon);
+    Pentagon p1(points);
+    Pentagon p2 = std::move(p1);
+    EXPECT_NEAR(static_cast<double>(p2), 5.5, 1e-6);
+}
+
+TEST(PentagonTest, OperatorDouble) {
+    Point points[5] = { Point(0, 0), Point(2, 0), Point(3, 1), Point(1.5, 3), Point(0, 1) };
+    Pentagon p(points);
+    double area = static_cast<double>(p);
     EXPECT_NEAR(area, 5.5, 1e-6);
 }
 
-TEST(PentagonTest, GeometricCenterTest) {
+TEST(PentagonTest, GeometricCenter) {
     Point points[5] = { Point(0, 0), Point(2, 0), Point(3, 1), Point(1.5, 3), Point(0, 1) };
-    Pentagon pentagon(points);
-    Point center = pentagon.geometricCenter();
-    EXPECT_NEAR(center.x, 1.3, 1e-6);
-    EXPECT_NEAR(center.y, 1.0, 1e-6);
+    Pentagon p(points);
+    Point center = p.geometricCenter();
+    EXPECT_NEAR(center.x_, 1.3, 1e-6);
+    EXPECT_NEAR(center.y_, 1.0, 1e-6);
 }
 
-TEST(PentagonTest, EqualityTest) {
+TEST(PentagonTest, EqualityOperator) {
     Point points1[5] = { Point(0, 0), Point(2, 0), Point(3, 1), Point(1.5, 3), Point(0, 1) };
-    Point points2[5] = { Point(0, 0), Point(2, 0), Point(3, 1), Point(1.5, 3), Point(0, 1) };
-    Pentagon pentagon1(points1);
-    Pentagon pentagon2(points2);
-    EXPECT_TRUE(pentagon1 == pentagon2);
+    Pentagon p1(points1);
+    Pentagon p2(points1);
+    EXPECT_TRUE(p1 == p2);
 }
 
-//////////////////////////////////////////
 // Тесты для класса Rhombus
-
-TEST(RhombusTest, CreationTest) {
+TEST(RhombusTest, ConstructorCopy) {
     Point points[4] = { Point(0, 0), Point(2, 1), Point(0, 2), Point(-2, 1) };
-    Rhombus rhombus(points);
-    EXPECT_EQ(rhombus.geometricCenter().x, 0.0);
-    EXPECT_EQ(rhombus.geometricCenter().y, 1.0);
+    Rhombus r1(points);
+    Rhombus r2 = r1;
+    EXPECT_EQ(r1, r2);
 }
 
-TEST(RhombusTest, AreaTest) {
+TEST(RhombusTest, ConstructorMove) {
     Point points[4] = { Point(0, 0), Point(2, 1), Point(0, 2), Point(-2, 1) };
-    Rhombus rhombus(points);
-    double area = static_cast<double>(rhombus);
+    Rhombus r1(points);
+    Rhombus r2 = std::move(r1);
+    EXPECT_NEAR(static_cast<double>(r2), 4.0, 1e-6);
+}
+
+TEST(RhombusTest, OperatorDouble) {
+    Point points[4] = { Point(0, 0), Point(2, 1), Point(0, 2), Point(-2, 1) };
+    Rhombus r(points);
+    double area = static_cast<double>(r);
     EXPECT_NEAR(area, 4.0, 1e-6);
 }
 
-TEST(RhombusTest, GeometricCenterTest) {
+TEST(RhombusTest, GeometricCenter) {
     Point points[4] = { Point(0, 0), Point(2, 1), Point(0, 2), Point(-2, 1) };
-    Rhombus rhombus(points);
-    Point center = rhombus.geometricCenter();
-    EXPECT_NEAR(center.x, 0.0, 1e-6);
-    EXPECT_NEAR(center.y, 1.0, 1e-6);
+    Rhombus r(points);
+    Point center = r.geometricCenter();
+    EXPECT_NEAR(center.x_, 0.0, 1e-6);
+    EXPECT_NEAR(center.y_, 1.0, 1e-6);
 }
 
-TEST(RhombusTest, EqualityTest) {
+TEST(RhombusTest, EqualityOperator) {
     Point points1[4] = { Point(0, 0), Point(2, 1), Point(0, 2), Point(-2, 1) };
-    Point points2[4] = { Point(0, 0), Point(2, 1), Point(0, 2), Point(-2, 1) };
-    Rhombus rhombus1(points1);
-    Rhombus rhombus2(points2);
-    EXPECT_TRUE(rhombus1 == rhombus2);
+    Rhombus r1(points1);
+    Rhombus r2(points1);
+    EXPECT_TRUE(r1 == r2);
+}
+
+// Тесты для класса FigureArray
+TEST(FigureArrayTest, AddAndTotalArea) {
+    FigureArray array(10);
+    Point points[5] = { Point(0, 0), Point(2, 0), Point(3, 1), Point(1.5, 3), Point(0, 1) };
+    Pentagon* p = new Pentagon(points);
+    array.add(p);
+    EXPECT_NEAR(array.totalArea(), static_cast<double>(*p), 1e-6);
+    delete p;  
+}
+
+TEST(FigureArrayTest, Remove) {
+    FigureArray array(10);
+    Point points[5] = { Point(0, 0), Point(2, 0), Point(3, 1), Point(1.5, 3), Point(0, 1) };
+    Pentagon p(points);
+    array.add(&p);
+    array.remove(0);
+    EXPECT_EQ(array.size(), 0);
+}
+
+TEST(FigureArrayTest, Size) {
+    FigureArray array(10);
+    EXPECT_EQ(array.size(), 0);
 }

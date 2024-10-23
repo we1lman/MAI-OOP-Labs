@@ -8,24 +8,27 @@ class Pentagon : public Figure
 {
 public:
     Pentagon() = default;
-    Pentagon(const Point points[5]);
-    Pentagon(const Pentagon& other);
+    Pentagon(const Point (&points)[5]);
+    Pentagon(const Pentagon &other);
+
     Pentagon& operator=(const Pentagon &other);
     Pentagon& operator=(Pentagon &&other) noexcept;
-    bool operator==(const Figure &other) const override;
-    void getInfo() const override;
+
     Point geometricCenter() const override;
     operator double() const override;
+    bool operator==(const Figure &other) const override;
 
-    Figure* clone() const override;
+    virtual Figure* clone() const override {
+        return new Pentagon(*this);
+    }
 
-    friend std::ostream &operator<<(std::ostream &os, const Pentagon &pentagon);
-    friend std::istream &operator>>(std::istream &is, Pentagon &pentagon);
-    
-    bool isValidPentagon() const;
+    void print(std::ostream& os) const override;
+    void read(std::istream& is) override;
 
 private:
-    Point points_[5];  
+    Point points_[5];
+    
+    bool isValidPentagon() const;
 };
 
 #endif // PENTAGON_HPP

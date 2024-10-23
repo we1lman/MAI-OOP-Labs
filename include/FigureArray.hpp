@@ -3,25 +3,30 @@
 
 #include "Figure.hpp"
 
-class FigureArray {
+class FigureArray 
+{
+public:
+    FigureArray(size_t capacity);
+    FigureArray(const FigureArray &other);
+
+    FigureArray& operator=(const FigureArray &other);
+    FigureArray& operator=(FigureArray &&other) noexcept;
+    FigureArray(FigureArray &&other) noexcept;
+
+    ~FigureArray();
+
+    void add(Figure *figure);
+    void remove(size_t index);
+    double totalArea() const;
+    void printAll() const;
+    size_t size() const;
+
 private:
-    Figure** figures_;
+    Figure **figures_;
     size_t size_;
     size_t capacity_;
 
-public:
-    FigureArray(size_t capacity);
-    FigureArray(const FigureArray& other);
-    FigureArray& operator=(const FigureArray& other);
-    FigureArray(FigureArray&& other) noexcept;
-    FigureArray& operator=(FigureArray&& other) noexcept;
-    ~FigureArray();
-
-    void addFigure(Figure* figure);
-    void removeFigure(size_t index);
-    double totalArea() const;
-    void printAll() const;
-    size_t getSize() const { return size_; }
+    void resize();
 };
 
 #endif // FIGUREARRAY_HPP
