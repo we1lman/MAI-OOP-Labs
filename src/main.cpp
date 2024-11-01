@@ -7,13 +7,23 @@
 
 int main()
 {
-    Point points_trapezoid[4] = { Point(0, 0), Point(4, 0), Point(3, 2), Point(1, 2) };
-    Point points_pentagon[5] = { Point(0, 0), Point(2, 0), Point(3, 1), Point(1.5, 3), Point(0, 1) };
-    Point points_rhombus[4] = { Point(0, 0), Point(2, 1), Point(0, 2), Point(-2, 1) };
+    Point<double> points_trapezoid[4] = {
+        Point<double>(0, 0), Point<double>(4, 0), Point<double>(3, 2), Point<double>(1, 2) 
+    };
+    Point<double> points_pentagon[5] = {
+        Point<double>(0, 0), Point<double>(2, 0), Point<double>(3, 1), Point<double>(1.5, 3), Point<double>(0, 1) 
+    };
+    Point<double> points_rhombus[4] = {
+        Point<double>(0, 0), Point<double>(2, 1), Point<double>(0, 2), Point<double>(-2, 1) 
+    };
 
-    Trapezoid trapezoid(points_trapezoid);
-    Pentagon pentagon(points_pentagon);
-    Rhombus rhombus(points_rhombus);
+    Trapezoid<double> trapezoid(points_trapezoid);
+    Pentagon<double> pentagon(points_pentagon);
+    Rhombus<double> rhombus(points_rhombus);
+
+    auto trapezoid_ptr = std::make_shared<Trapezoid<double>>(points_trapezoid);
+    auto pentagon_ptr = std::make_shared<Pentagon<double>>(points_pentagon);
+    auto rhombus_ptr = std::make_shared<Rhombus<double>>(points_rhombus);
 
     std::cout << "Trapezoid Information: " << std::endl;
     std::cout << trapezoid << std::endl;
@@ -29,6 +39,16 @@ int main()
     std::cout << rhombus << std::endl;
     std::cout << "Area: " << static_cast<double>(rhombus) << std::endl;
     std::cout << "Geometric Center: " << rhombus.geometricCenter() << std::endl;
+
+    FigureArray<Figure<double>> figureArray;
+    figureArray.add(trapezoid_ptr);
+    figureArray.add(pentagon_ptr);
+    figureArray.add(rhombus_ptr);
+
+    std::cout << "\nFigures in Array: " << std::endl;
+    for (size_t i = 0; i < figureArray.size(); ++i) {
+        std::cout << figureArray[i] << std::endl;
+    }
 
     return 0;
 }

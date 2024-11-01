@@ -3,22 +3,27 @@
 
 #include "Figure.hpp"
 #include "Point.hpp"
+#include <memory>
+#include <iostream>
+#include <stdexcept>
 
-class Pentagon : public Figure
-{
+template <Numeric T>
+class Pentagon : public Figure<T> {
 public:
+    using figure_base_type = T;
+
     Pentagon() = default;
-    Pentagon(const Point (&points)[5]);
-    Pentagon(const Pentagon &other);
+    Pentagon(const Point<T> (&points)[5]);
+    Pentagon(const Pentagon<T> &other);
 
-    Pentagon& operator=(const Pentagon &other);
-    Pentagon& operator=(Pentagon &&other) noexcept;
+    Pentagon& operator=(const Pentagon<T> &other);
+    Pentagon& operator=(Pentagon<T> &&other) noexcept;
 
-    Point geometricCenter() const override;
+    Point<T> geometricCenter() const override;
     operator double() const override;
-    bool operator==(const Figure &other) const override;
+    bool operator==(const Figure<T> &other) const override;
 
-    virtual Figure* clone() const override {
+    virtual Figure<T>* clone() const override {
         return new Pentagon(*this);
     }
 
@@ -26,9 +31,11 @@ public:
     void read(std::istream& is) override;
 
 private:
-    Point points_[5];
+    std::unique_ptr<Point<T>> points_[5];
     
     bool isValidPentagon() const;
 };
+
+#include "../src/Pentagon.tpp"
 
 #endif // PENTAGON_HPP
